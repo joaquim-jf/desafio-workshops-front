@@ -1,0 +1,225 @@
+<div class="main-wrapper">
+  
+  <!-- Cabeçalho -->
+  <header class="header-banner">
+    <h1>Atas dos Workshops</h1>
+  </header>
+
+  <div class="content-container">
+
+    <!-- Card principal -->
+    <mat-card class="glass-card">
+      <mat-card-content>
+
+        <!-- Área de filtros para pesquisar atas -->
+        <div class="filters-grid">
+
+          <!-- Filtro por colaborador -->
+          <mat-form-field appearance="outline" color="primary" class="custom-filter">
+            <mat-label>Colaborador</mat-label>
+
+            <!-- Sempre que o usuário digita, a função filtrar() é executada filtroColaborador-->
+            <input matInput [(ngModel)]="filtroColaborador" (input)="filtrar()" placeholder="Pesquisar participante...">
+
+            <!-- Ícone exibido no final do campo -->
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
+
+          <!-- Filtro por nome do workshop -->
+          <mat-form-field appearance="outline" color="primary" class="custom-filter">
+            <mat-label>Workshop</mat-label>
+           
+            <!-- Sempre que o usuário digita, a função filtrar() é executada filtroWorkshop-->
+            <input matInput [(ngModel)]="filtroWorkshop" (input)="filtrar()" placeholder="Pesquisar workshop...">
+
+            <!-- Ícone visual -->
+            <mat-icon matSuffix>assignment</mat-icon>
+          </mat-form-field>
+
+          <!-- Filtro por data -->
+          <mat-form-field appearance="outline" color="primary" class="custom-filter">
+            <mat-label>Data</mat-label>
+
+            <!-- Campo de data do Angular Material -->
+            <input matInput [matDatepicker]="picker" [(ngModel)]="filtroData" (dateChange)="filtrar()">
+
+            <!-- Botão que abre o calendário -->
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+        </div>
+
+        <div class="table-container">
+
+          <!-- Tabela do Angular Material -->
+          <table mat-table [dataSource]="atasFiltradas" class="custom-table mat-elevation-z0">
+            
+            <!-- Coluna Data -->
+            <ng-container matColumnDef="data">
+              <th mat-header-cell *matHeaderCellDef> Data </th>
+
+              <!-- Exibe a data formatada -->
+              <td mat-cell *matCellDef="let ata"> 
+                {{ ata.workshop.dataRealizacao | date:'dd/MM/yyyy' }} 
+              </td>
+            </ng-container>
+
+            <!-- Coluna Workshop -->
+            <ng-container matColumnDef="workshop">
+              <th mat-header-cell *matHeaderCellDef> Workshop </th>
+
+              <!-- Quando clicar na célula selecionar(ata) -->
+              <td mat-cell *matCellDef="let ata" (click)="selecionar(ata)" class="clickable-cell">
+                <strong>{{ ata.workshop.nome }}</strong>
+
+                <!-- Ícone indicando abertura de detalhes -->
+                <mat-icon inline style="font-size: 14px; margin-left: 5px;">open_in_new</mat-icon>
+              </td>
+            </ng-container>
+
+            <!-- Coluna quantidade de participantes -->
+            <ng-container matColumnDef="participantes">
+              <th mat-header-cell *matHeaderCellDef> Participantes </th>
+
+              <!-- Mostra quantidade de colaboradores -->
+              <td mat-cell *matCellDef="let ata">
+                <span class="badge-count">{{ ata.colaboradores.length }} pessoas</span>
+              </td>
+            </ng-container>
+
+            <!-- Linha de cabeçalho -->
+            <tr mat-header-row *matHeaderRowDef="['data', 'workshop', 'participantes']"></tr>
+
+            <!-- Linhas da tabela -->
+            <tr mat-row *matRowDef="let row; columns: ['data', 'workshop', 'participantes'];" class="row-hover"></tr>
+
+          </table>
+
+          <!-- Estado vazio quando não há resultados -->
+          <div *ngIf="atasFiltradas.length === 0" class="empty-state">
+            <mat-icon>search_off</mat-icon>
+            <p>Nenhuma ata corresponde aos filtros aplicados.</p>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Painel de detalhes exibido apenas se um workshop estiver selecionado -->
+    <div *ngIf="workshopSelecionado" class="details-panel" style="margin-top: 25px;">
+
+      <mat-card class="glass-card-details">
+
+        <!-- Cabeçalho do card -->
+        <mat-card-header>
+
+          <!-- Ícone do card -->
+          <div mat-card-avatar class="details-icon">
+            <mat-icon color="primary">analytics</mat-icon>
+          </div>
+
+          <!-- Nome do workshop -->
+          <mat-card-title>{{ workshopSelecionado.workshop.nome }}</mat-card-title>
+
+          <!-- Data completa -->
+          <mat-card-subtitle>
+            {{ workshopSelecionado.workshop.dataRealizacao | date:'fullDate' }}
+          </mat-card-subtitle>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+          <!-- Descrição do evento -->
+          <div class="description-section">
+            <h4>Descrição do Evento</h4>
+            <p>{{ workshopSelecionado.workshop.descricao }}</p>
+          </div>
+
+          <!-- Área com lista de presença e gráfico -->
+          <div class="row-details" style="display: flex; gap: 30px; flex-wrap: wrap; margin-top: 20px;">
+            
+            <!-- Lista de participantes -->
+            <div style="flex: 1; min-width: 280px;">
+              <h4><mat-icon inline>groups</mat-icon> Lista de Presença</h4>
+
+              <mat-nav-list class="custom-list-vertical" style="max-height: 400px; overflow-y: auto;">
+                <mat-list-item *ngFor="let c of workshopSelecionado.colaboradores">
+
+                  <!-- Ícone de pessoa -->
+                  <mat-icon matListItemIcon>person_outline</mat-icon>
+
+                  <!-- Nome do colaborador -->
+                  <span matListItemTitle>{{ c.nome }}</span>
+
+                </mat-list-item>
+              </mat-nav-list>
+            </div>
+
+            <!-- Área do gráfico comparativo -->
+            <div style="flex: 2; min-width: 350px;">
+              <h4>Comparativo de Engajamento Individual</h4>
+
+              <!-- Altura dinâmica baseada no número de colaboradores -->
+              <div [style.height.px]="workshopSelecionado.colaboradores.length * 35 + 100" style="min-height: 300px;">
+
+                <!-- Gráfico de barras -->
+                <canvas baseChart 
+                  [data]="barData" 
+                  [options]="barOptions" 
+                  [type]="barType">
+                </canvas>
+
+              </div>
+
+              <!-- Observação sobre o gráfico -->
+              <p style="font-size: 11px; color: #777; margin-top: 10px; font-style: italic;">
+                * O gráfico exibe o histórico total de participações de cada integrante desta ata em todos os workshops.
+              </p>
+
+            </div>
+          </div>
+
+        </mat-card-content>
+
+        <!-- Botão para fechar os detalhes -->
+        <mat-card-actions style="justify-content: flex-end; padding: 16px;">
+          <button mat-button color="warn" (click)="workshopSelecionado = null">
+            <mat-icon>close</mat-icon> FECHAR DETALHES
+          </button>
+        </mat-card-actions>
+
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Seção com gráfico geral -->
+  <div class="content-container">
+
+    <mat-card class="glass-card" style="margin-bottom: 25px;">
+
+      <!-- Título do gráfico -->
+      <mat-card-header>
+        <mat-card-title>Visão Geral de Participação</mat-card-title>
+        <mat-card-subtitle>Distribuição de colaboradores por Workshop</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <!-- Gráfico de pizza -->
+        <div style="display: block; max-width: 380px; margin: 0 auto;">
+          <canvas baseChart 
+            [data]="pieData" 
+            [options]="pieOptions" 
+            [type]="pieType">
+          </canvas>
+        </div>
+
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+  
+</div>

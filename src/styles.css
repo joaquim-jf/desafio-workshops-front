@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import "@angular/material/prebuilt-themes/azure-blue.css";
+/* Fundo branco/sólido no painel do calendário */
+.mat-datepicker-content {
+  background-color: white !important;
+  color: black !important;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+}
+
+/* Cor do cabeçalho do calendário (onde fica o mês)  */
+.mat-calendar-header {
+  background-color: #f8f9fa;
+}
+
+/* Cor do dia selecionado */
+.mat-calendar-body-selected {
+  background-color: #1976d2 !important;
+  color: white !important;
+}

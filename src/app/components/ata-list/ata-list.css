@@ -1,0 +1,168 @@
+/* ==========================================================================
+   CONTAINER PRINCIPAL E ESTRUTURA GLOBAL
+   ========================================================================== */
+
+/* Define o fundo da aplicação e garante que ocupe toda a altura da tela */
+.main-wrapper {
+  background-color: #f0f4f8; 
+  min-height: 100vh;
+}
+
+
+
+/* Banner superior com azul pastel e texto centralizado */
+.header-banner {
+  background-color: #e3f2fd; 
+  padding: 40px 20px;
+  text-align: center;
+  color: #1565c0; 
+  border-bottom: 3px solid #bbdefb;
+}
+
+.header-banner h1 {
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+/* Limita a largura do conteúdo e centraliza na tela */
+.content-container {
+  padding: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   CARDS E EFEITOS
+   ========================================================================== */
+
+/* Efeito de vidro translúcido com desfoque de fundo (backdrop-filter) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(10px); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Card de detalhes: um pouco mais opaco e com destaque lateral azul */
+.glass-card-details {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-left: 6px solid #1976d2; 
+  backdrop-filter: blur(5px);
+}
+
+/* ==========================================================================
+   FILTROS E INPUTS (ANGULAR MATERIAL )
+   ========================================================================== */
+
+/* Organiza os campos de busca lado a lado */
+.filters-grid {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.custom-filter {
+  flex: 1;
+}
+
+/* Sobrescreve as cores do Material Design para o azul do projeto ao focar nos inputs */
+::ng-deep .mat-primary .mat-focused .mat-form-field-label {
+  color: #1976d2 !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: #1976d2 !important;
+}
+
+/* Garante que o dia selecionado no calendário do Material use o azul correto */
+::ng-deep .mat-calendar-body-selected {
+  background-color: #1976d2 !important;
+}
+
+/* ==========================================================================
+   TABELA E ELEMENTOS CLICÁVEIS
+   ========================================================================== */
+
+/* Estilização do container da tabela com fundo cinza suave */
+.table-container {
+  background: rgba(245, 245, 245, 0.8);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.custom-table {
+  width: 100%;
+  background: transparent !important;
+}
+
+/* Efeito de link e hover para a coluna Workshop */
+.clickable-cell {
+  color: #1976d2;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.clickable-cell:hover {
+  color: #1565c0;
+  text-decoration: underline;
+  background-color: rgba(25, 118, 210, 0.05);
+}
+
+/* ==========================================================================
+   PAINEL DE DETALHES E PARTICIPANTES
+   ========================================================================== */
+
+/* Bloco de detalhes com animação de deslizar para baixo */
+.details-panel {
+  margin-top: 30px;
+  animation: slideDown 0.4s ease-out;
+}
+
+.description {
+  margin: 15px 0;
+  font-size: 1.1em;
+  color: #444;
+}
+
+/* Estilização dos itens da lista de presença (chips verticais) */
+.chip-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.participant-chip {
+  background: rgba(25, 118, 210, 0.1);
+  color: #1976d2;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border-left: 4px solid #1976d2;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+   GRÁFICOS E ANIMAÇÕES
+   ========================================================================== */
+
+/* Limita a altura dos gráficos para não quebrar o layout */
+canvas {
+  max-height: 400px;
+  margin-bottom: 20px;
+}
+
+/* Definição da animação de entrada dos detalhes */
+@keyframes slideDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
