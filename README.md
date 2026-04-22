@@ -47,5 +47,4 @@ Desafio técnico desenvolvido em **[Angular CLI](https://github.com/angular/angu
 - `src/app/models`: Interfaces TypeScript para garantir a integridade dos dados.
 
 ---
-Desenvolvido com ❤️ por JF_KING_083
 
